@@ -1,68 +1,111 @@
-# TemperatureMonitoring
+# Temperature Monitoring
 
-Overview: Temperature Monitoring Dashboard
-The app is an Angular 21 “Temperature Monitoring” dashboard that shows sensor data and live temperature readings.
-Architecture
-Routes and layout
-Shell layout (ShellComponent): Header with a “Temperature Monitoring” title and nav links (Dashboard, Sensors, Settings).
-Routes:
-/dashboard – main dashboard (default)
-/sensors – placeholder (“Coming soon”)
-/settings – placeholder (“Coming soon”)
-Core API layer
-Models (models.ts):
-Sensor: id, name, avgTempC, readingCount
-DashboardMetrics: activeSensors, messagesPerMinute
-ReadingPoint: ts (ISO string), tempC
-TemperatureApiService:
-getMetrics() → /metrics
-listSensors() → /sensors
-getLiveReadings(sensorId) → /sensors/:id/readings/live
-API prefix interceptor: Adds /api to relative URLs (except those starting with http or /assets).
-Mock backend
-The app uses mock data instead of a real backend:
-TemperatureApiMockService implements the same interface as TemperatureApiService.
-Mock data:
-10 sensors with IDs like sensor-000 … sensor-009
-Metrics: 42 active sensors, 1284 messages per minute
-Live readings: generated with sine waves and noise
-Dashboard page
+A Temperature Monitoring dashboard built with Angular 21 that displays sensor data and live temperature readings. It includes an Express backend that receives data from a temperature measurement process or a built-in simulator.
+
+## Architecture
+
+### Routes and Layout
+
+- **Shell layout** (`ShellComponent`): Header with "Temperature Monitoring" title and nav links (Dashboard, Sensors, Settings)
+- **Routes:**
+  - `/dashboard` – main dashboard (default)
+  - `/sensors` – placeholder ("Coming soon")
+  - `/settings` – placeholder ("Coming soon")
+
+### Core API Layer
+
+**Models** (`models.ts`):
+- `Sensor`: id, name, avgTempC, readingCount
+- `DashboardMetrics`: activeSensors, messagesPerMinute
+- `ReadingPoint`: ts (ISO string), tempC
+
+**TemperatureApiService**:
+- `getMetrics()` → `/api/metrics`
+- `listSensors()` → `/api/sensors`
+- `getLiveReadings(sensorId)` → `/api/sensors/:id/readings/live`
+
+**API prefix interceptor**: Adds `/api` to relative URLs (except those starting with `http` or `/assets`).
+
+### Backend Server
+
+The app uses an Express server that provides real-time sensor data:
+
+- **Endpoints:**
+  - `GET /api/metrics` – active sensors count and messages per minute
+  - `GET /api/sensors` – list of sensors with average temperature and reading count
+  - `GET /api/sensors/:id/readings/live` – live temperature readings for a sensor
+
+- **Data source:** The server spawns a `measure_temp` process. If that fails, it falls back to an internal simulator that generates temperature readings.
+
+### Dashboard Page
+
 The main view includes:
-Stat cards – KPI cards for:
-Active sensors
-Messages per minute
-Sensors table – List of sensors with:
-Sensor ID/name
-Average temperature (°C)
-Reading count
-Clicking a row selects that sensor.
-Live readings panel – For the selected sensor:
-Dropdown to switch sensors
-Line chart (Chart.js) of temperature over time
-Recent data packets – last 5 readings with time and temperature
-Data is polled every 2 seconds via getLiveReadings().
-Error handling – Red banners when API calls fail, with a “Refresh Page” button.
-UI components
-Reusable components:
-KpiCardComponent – labels and values
-CardComponent – card wrapper
-TableComponent – table layout with ThDirective, TdDirective, TrDirective
-BadgeComponent, ButtonComponent – generic UI elements
-Tech stack
-Angular 21 with standalone components
-Signals for local state
-ng2-charts (Chart.js) for the temperature chart
-Tailwind CSS for styling (slate theme)
-RxJS for polling and HTTP
-Summary
-The app is a coding test for a temperature monitoring dashboard. It uses mock data to show how sensors would be listed, how metrics would be displayed, and how live temperature readings would be polled and charted. The Sensors and Settings pages are placeholders for future features.
 
+- **Stat cards** – KPI cards for:
+  - Active sensors
+  - Messages per minute
+- **Sensors table** – List of sensors with:
+  - Sensor ID/name
+  - Average temperature (°C)
+  - Reading count
+  - Row click selects a sensor
+- **Live readings panel** – For the selected sensor:
+  - Dropdown to switch sensors
+  - Line chart (Chart.js) of temperature over time
+  - Recent data packets – last 5 readings with time and temperature
+  - Data is polled every 2 seconds via `getLiveReadings()`
+- **Error handling** – Red banners when API calls fail, with a "Refresh Page" button
+
+### UI Components
+
+Reusable components:
+- `KpiCardComponent` – labels and values
+- `CardComponent` – card wrapper
+- `TableComponent` – table layout with `ThDirective`, `TdDirective`, `TrDirective`
+- `BadgeComponent`, `ButtonComponent` – generic UI elements
+
+### Tech Stack
+
+- Angular 21 with standalone components
+- Signals for local state
+- ng2-charts (Chart.js) for the temperature chart
+- Tailwind CSS for styling (slate theme)
+- RxJS for polling and HTTP
+- Express backend (Node.js)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm
+
+### Running the Application
+
+1. **Start the backend server** (from the project root):
+
+   ```bash
+   cd server && npm install && npm run dev
+   ```
+
+   The server runs at `http://localhost:3000`.
+
+2. **Start the Angular development server** (in a separate terminal):
+
+   ```bash
+   npm install
+   ng serve
+   ```
+
+3. Open your browser and navigate to `http://localhost:4200/`. The app proxies `/api` requests to the backend.
+
+---
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
 
-## Development server
+## Development Server
 
-To start a local development server, run:
+To start the Angular development server:
 
 ```bash
 ng serve
@@ -70,7 +113,7 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+## Code Scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
@@ -86,7 +129,7 @@ ng generate --help
 
 ## Building
 
-To build the project run:
+To build the project:
 
 ```bash
 ng build
@@ -94,17 +137,17 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running unit tests
+## Running Unit Tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+To execute unit tests with the [Vitest](https://vitest.dev/) test runner:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Running End-to-End Tests
 
-For end-to-end (e2e) testing, run:
+For end-to-end (e2e) testing:
 
 ```bash
 ng e2e
