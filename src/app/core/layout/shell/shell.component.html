@@ -1,0 +1,39 @@
+<div class="min-h-screen bg-slate-50 text-slate-900">
+  <div class="mx-auto max-w-7xl px-4 py-6">
+    <header class="mb-6 flex items-center justify-between gap-4">
+      <div>
+        <h1 class="text-xl font-semibold">Temperature Monitoring</h1>
+        <p class="text-sm text-slate-500">Live sensor overview</p>
+      </div>
+
+      <nav class="flex flex-wrap gap-2 text-sm">
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="bg-white shadow"
+          class="rounded-lg px-3 py-2 hover:bg-white/70"
+        >
+          Dashboard
+        </a>
+        <!-- <a
+          routerLink="/sensors"
+          routerLinkActive="bg-white shadow"
+          class="rounded-lg px-3 py-2 hover:bg-white/70"
+        >
+          Sensors
+        </a>
+        <a
+          routerLink="/settings"
+          routerLinkActive="bg-white shadow"
+          class="rounded-lg px-3 py-2 hover:bg-white/70"
+        >
+          Settings
+        </a> -->
+      </nav>
+    </header>
+
+    <main>
+      <router-outlet />
+    </main>
+  </div>
+</div>
+
