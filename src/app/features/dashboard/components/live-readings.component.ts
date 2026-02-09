@@ -106,7 +106,7 @@ export class LiveReadingsComponent implements OnChanges {
     this.pollSub?.unsubscribe();
 
     // Simple polling. For real-time: swap to WebSocket/SSE later.
-    this.pollSub = interval(2000)
+    this.pollSub = interval(500)
       .pipe(
         switchMap(() => this.api.getLiveReadings(this.sensor!.id)),
         takeUntilDestroyed(this.destroyRef)

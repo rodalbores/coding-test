@@ -54,7 +54,21 @@ export class TemperatureLineChartComponent implements OnInit, OnChanges {
     },
     scales: {
       x: {
-        display: false,
+        display: true,
+        ticks: {
+          font: {
+            size: 11,
+          },
+          maxRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: 6,
+        },
+        grid: {
+          display: false,
+        },
+        border: {
+          display: false,
+        },
       },
       y: {
         ticks: {
@@ -96,7 +110,7 @@ export class TemperatureLineChartComponent implements OnInit, OnChanges {
 
     const labels = this.data.map((point) => {
       const date = new Date(point.ts);
-      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     });
 
     this.chartData = {
