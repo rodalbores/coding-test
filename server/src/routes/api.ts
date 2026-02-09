@@ -13,8 +13,13 @@ export function createApiRouter(store: SensorStore): Router {
   });
 
   router.get('/sensors/:sensorId/readings/live', (req: Request, res: Response) => {
-    const { sensorId } = req.params;
-    const readings = store.getLiveReadings(sensorId!);
+    const sensorIdParam = req.params.sensorId;
+    const sensorId = typeof sensorIdParam === 'string' ? sensorIdParam : sensorIdParam?.[0];
+    if (!sensorId) {
+      res.status(400).json({ error: 'Invalid sensor ID' });
+      return;
+    }
+    const readings = store.getLiveReadings(sensorId);
 
     if (readings === null) {
       res.json([]);
